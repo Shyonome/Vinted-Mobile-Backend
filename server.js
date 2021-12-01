@@ -9,7 +9,7 @@ const expressFormidable = require('express-formidable');
 server.use(expressFormidable());
 
 const mongoose = require('mongoose');
-mongoose.connect(process.env.MONGODB_URI);
+mongoose.connect(process.env.MONGODB_FAR_URI);
 
 const cloudinary = require("cloudinary").v2;
 

@@ -81,4 +81,30 @@ router.post('/offer/publish', bearerToken, publishOffer, seekOffer, async (reque
     }
 });
 
+router.post("/payment", async (request, response) => {
+    try {
+        const stripeResponse = await stripe.charges.create({
+            amount: request.fields.amount * 100,
+            description: request.fields.description,
+            currency: "eur",
+            source: request.fields.token,
+        });
+        
+        if (stripeResponse.status === "succeeded") {
+            response.status(200).json({ message: "Paiement validé" });
+        } else {
+            response.status(400).json({ message: "An error occured" });
+        }
+
+        const newTransaction = new Transaction({
+            annonce: "6193d609d77fbfe9b986948a",
+            owner: request.fields.ownerId,
+        });
+
+        newTransaction.save();
+    } catch (error) {
+        response.status(400).json({ message: { error:  error.message } });
+    }
+});
+
 module.exports = router;
