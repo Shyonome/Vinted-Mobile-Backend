@@ -30,5 +30,5 @@ server.all('*', (request, response) => {
 });
 
 server.listen(process.env.PORT, () => {
-    console.log("Server started ! 🚀😎");
+    console.log("Server launched ! 🚀");
 });
