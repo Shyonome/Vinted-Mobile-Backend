@@ -45,13 +45,21 @@ router.get('/offers', async (request, response) => {
         }
 
         let page;
-        if (Number(request.query.page) < 1) {
+        if (Number(request.query.page) < 1 || !request.query.page) {
           page = 1;
+          console.log(page);
         } else {
           page = Number(request.query.page);
         }
 
-        let limit = Number(request.query.limit);
+
+        let limit;
+
+        if (!request.query.limit) {
+          limit = 10;
+        } else {
+          limit = Number(request.query.limit);
+        }
 
         const offers = await Offer.find(filters)
           .populate({
@@ -69,7 +77,7 @@ router.get('/offers', async (request, response) => {
           offers: offers,
         });
     } catch (error) {
-        response.status(400).json({ message: { error: error.message } });
+        response.status(400).json({ message: error.message });
     }
 });
 
