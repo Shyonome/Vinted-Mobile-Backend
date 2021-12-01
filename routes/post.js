@@ -16,7 +16,6 @@ const isRegistered = require('../middleware/signup/isRegistered.js');
 const createAccount = require('../middleware/signup/createAccount.js');
 const bearerToken = require('../middleware/offer/post/bearerToken.js');
 const publishOffer = require('../middleware/offer/post/publishOffer.js');
-const seekOffer = require('../middleware/offer/post/seekOffer');
 
 router.post('/user/signup', isRegistered, createAccount, async (request, response) => {
     try {
@@ -51,8 +50,31 @@ router.post('/user/login', async (request, response) => {
     }
 });
 
-router.post('/offer/publish', bearerToken, publishOffer, seekOffer, async (request, response) => {
+router.post('/offer/publish', bearerToken, publishOffer,  async (request, response) => {
     try {
+
+        const seekOffer = await Offer.findOne({
+            product_name: request.fields.title,
+            product_description: request.fields.description,
+            product_price: request.fields.price,
+            product_details: [
+                { MARQUE: request.fields.brand },
+                { TAILLE: request.fields.size },
+                { ÉTAT: request.fields.condition },
+                { COULEUR: request.fields.color },
+                { EMPLACEMENT: request.fields.city },
+            ],
+            owner: {
+                account: {
+                    username: request.userIdentity.account.username,
+                    phone: request.userIdentity.account.phone,
+                    avatar: request.userIdentity.account.avatar
+                },
+                _id: request.userIdentity._id,
+            },
+            product_image: request.pictureToUpload,
+        });
+
         response.status(200).json({
             message: "offer published !",
             _id: seekOffer && seekOffer._id,
