@@ -2,7 +2,7 @@ const User = require('../../models/User.js');
 
 const isRegistered = async (request, response, next) => {
     try {
-        if (request.fields.username && request.fields.email && request.fields.phone && request.fields.password) {
+        if (request.fields.username && request.fields.email && request.fields.password) {
             const checkEmailAccount = await User.findOne({ email: request.fields.email });
         if (!checkEmailAccount) {
             return next();
