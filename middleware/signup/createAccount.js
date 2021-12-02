@@ -21,7 +21,7 @@ const createAccount = async (request, response, next) => {
            email: request.fields.email,
            account: {
              username: request.fields.username,
-             phone: Number(request.fields.phone),
+             phone: request.fields.phone && Number(request.fields.phone),
              avatar: pictureToUpload ? await cloudinary.uploader.upload(pictureToUpload) : undefined,
            },
            token: token,
