@@ -47,7 +47,6 @@ router.get('/offers', async (request, response) => {
         let page;
         if (Number(request.query.page) < 1 || !request.query.page) {
           page = 1;
-          console.log(page);
         } else {
           page = Number(request.query.page);
         }
@@ -56,7 +55,7 @@ router.get('/offers', async (request, response) => {
         let limit;
 
         if (!request.query.limit) {
-          limit = 10;
+          limit = undefined;
         } else {
           limit = Number(request.query.limit);
         }
