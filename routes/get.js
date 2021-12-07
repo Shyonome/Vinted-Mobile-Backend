@@ -68,7 +68,7 @@ router.get('/offers', async (request, response) => {
             select: "account",
           })
           .sort(sort)
-          .skip((page - 1) * limit ? limit : 1)
+          .skip((page - 1) * limit ? limit : 0)
           .limit(limit ? limit : count);
 
 
