@@ -61,16 +61,17 @@ router.get('/offers', async (request, response) => {
           limit = Number(request.query.limit);
         }
 
+        const count = await Offer.countDocuments(filters);
+
         const offers = await Offer.find(filters)
           .populate({
             path: "owner",
             select: "account",
           })
           .sort(sort)
-          .skip((page - 1) * limit)
-          .limit(limit);
+          .skip((page - 1) * limit ? limit : 1)
+          .limit(limit ? limit : count);
 
-        const count = await Offer.countDocuments(filters);
 
         response.status(200).json({
           count: count,
