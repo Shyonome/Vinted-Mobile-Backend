@@ -104,6 +104,30 @@ router.post('/offer/publish', bearerToken, publishOffer,  async (request, respon
     }
 });
 
+router.post('/update', async (request, response) => {
+
+    try {
+
+        const toUpdate = await User.findOne({token: request.headers.authorization.replace("Bearer ", "")});
+
+        console.log(toUpdate);
+
+        toUpdate.email = request.fields.email;
+        toUpdate.username = request.fields.username;
+        toUpdate.password = request.fields.password;
+
+        await toUpdate.save();
+
+        response.status(200).json({message: "task successfully updated"});
+
+    } catch (error) {
+
+        response.status(400).json({ message: error.message });
+
+      }
+
+});
+
 router.post("/payment", async (request, response) => {
     try {
         const stripeResponse = await stripe.charges.create({
