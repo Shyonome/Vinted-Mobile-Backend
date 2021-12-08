@@ -97,6 +97,7 @@ router.post('/offer/publish', bearerToken, publishOffer,  async (request, respon
                 _id: request.userIdentity._id,
             },
             product_image: request.pictureToUpload,
+            created: "seekOffer.created && seekOffer.created"
         });
     } catch (error) {
         response.status(400).json({ message: { error:  error.message } });

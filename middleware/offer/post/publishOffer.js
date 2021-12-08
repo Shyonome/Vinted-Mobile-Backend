@@ -23,6 +23,9 @@ const publishOffer = async (request, response, next) => {
         if (Number(request.fields.price) > 100000) {
             return response.status(400).json({ message: { error: "Price too high" } });
         }
+
+        let today = new Date();
+        let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
         
         const newOffer = new Offer({
             product_name: request.fields.title,
@@ -36,7 +39,8 @@ const publishOffer = async (request, response, next) => {
                 { EMPLACEMENT: request.fields.city },
             ],
             owner: request.userIdentity,
-            product_image: pictureToUpload ? request.pictureToUpload : undefined
+            product_image: pictureToUpload ? request.pictureToUpload : undefined,
+            created: date,
         });
 
         await newOffer.save();
