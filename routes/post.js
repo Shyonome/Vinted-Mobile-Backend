@@ -112,11 +112,29 @@ router.post('/update', async (request, response) => {
 
         console.log(toUpdate);
 
-        toUpdate.email = request.fields.email;
-        toUpdate.username = request.fields.username;
-        toUpdate.password = request.fields.password;
+        if (toUpdate.email) {
+            toUpdate.email = request.fields.email;
+        }
+        
+        if (toUpdate.username) {
+            toUpdate.username = request.fields.username;
+        }
+        
+        if (toUpdate.password) {
+            toUpdate.password = request.fields.password;
+        }
 
-        await toUpdate.save();
+        if (request.files.picture) {
+            const pictureToUpload = request.files.picture.path;
+            request.pictureToUpload = await cloudinary.uploader.upload(pictureToUpload)
+            toUpdate.account.avatar = request.pictureToUpload;
+        }
+
+        if (toUpdate.email || toUpdate.username || toUpdate.password || toUpdate.picture) {
+            await toUpdate.save();
+        } else {
+            response.status(200).json({message: "Nothing saved"});
+        }
 
         response.status(200).json({message: "task successfully updated"});
 
