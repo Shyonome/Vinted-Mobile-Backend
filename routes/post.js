@@ -128,6 +128,22 @@ router.post('/update', async (request, response) => {
 
 });
 
+router.post('/profile', async (request, response) => {
+
+    try {
+
+        const toGet = await User.findOne({token: request.headers.authorization.replace("Bearer ", "")});
+
+        response.status(200).json(toGet);
+
+    } catch (error) {
+
+        response.status(400).json({ message: error.message });
+
+      }
+
+});
+
 router.post("/payment", async (request, response) => {
     try {
         const stripeResponse = await stripe.charges.create({

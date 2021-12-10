@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 const Offer = require('../models/Offer.js');
+const User = require('../models/User.js');
 
 router.get("/", async (request, response)=>{
     try {
